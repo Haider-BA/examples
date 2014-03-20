@@ -20,5 +20,12 @@ ex01: 01-stringExchange.o
 runex01:
 	${EXEC} -n 2 ./ex01
 
+ex02: 02-broadcast.o
+	${CC} ${CFLAGS} -o ex02 $^
+	${RM} $^
+
+runex02:
+	${EXEC} -n 4 ./ex02
+
 clean:
 	rm -rf ${ALL}
