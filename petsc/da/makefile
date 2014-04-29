@@ -82,55 +82,55 @@ ex15: ex15.o chkopts
 	${RM} -f ex15.o
 
 runex1:
-	mpiexec -n 4 ./ex1
+	${MPIEXEC} -n 4 ./ex1
 
 runex2:
-	mpiexec -n 4 ./ex2
+	${MPIEXEC} -n 4 ./ex2
 
 runex3:
-	mpiexec -n 4 ./ex3
+	${MPIEXEC} -n 4 ./ex3
 
 runex4:
-	mpiexec -n 4 ./ex4
+	${MPIEXEC} -n 4 ./ex4
 
 runex5:
-	mpiexec -n 4 ./ex5
+	${MPIEXEC} -n 4 ./ex5
 
 runex6a:
-	mpiexec -n 4 ./ex6a
+	${MPIEXEC} -n 4 ./ex6a
 
 runex6b:
-	mpiexec -n 4 ./ex6b
+	${MPIEXEC} -n 4 ./ex6b
 
 runex7:
-	mpiexec -n 4 ./ex7
+	${MPIEXEC} -n 4 ./ex7
 
 runex8:
-	mpiexec -n 4 ./ex8
+	${MPIEXEC} -n 4 ./ex8
 
 runex9:
-	mpiexec -n 4 ./ex9
+	${MPIEXEC} -n 4 ./ex9
 
 runex10:
-	mpiexec -n 1 ./ex10
+	${MPIEXEC} -n 1 ./ex10
 
 runex11a:
-	mpiexec -n 4 ./ex11a
+	${MPIEXEC} -n 4 ./ex11a
 
 runex11b:
-	mpiexec -n 4 ./ex11b
+	${MPIEXEC} -n 4 ./ex11b
 
 runex12:
-	mpiexec -n 4 ./ex12
+	${MPIEXEC} -n 4 ./ex12
 
 runex13:
-	mpiexec -n 4 ./ex13
+	${MPIEXEC} -n 4 ./ex13
 
 runex13a:
-	mpiexec -n 4 ./ex13a
+	${MPIEXEC} -n 4 ./ex13a
 
 runex14:
-	mpiexec -n 4 ./ex14
+	${MPIEXEC} -n 4 ./ex14
 
 runex15:
-	mpiexec -n 4 ./ex15
+	${MPIEXEC} -n 4 ./ex15

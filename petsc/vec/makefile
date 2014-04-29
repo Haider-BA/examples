@@ -12,4 +12,4 @@ ex1: ex1.o chkopts
 	${RM} -f ex1.o
 
 runex1:
-	mpiexec -n 4 ./ex1
+	${MPIEXEC} -n 4 ./ex1
