@@ -2,7 +2,7 @@ CC = ${MPICC}
 CFLAGS = -Wextra -Wall -pedantic -O3
 RM = rm -rf
 EXEC = ${MPIEXEC}
-ALL = ex00 ex01 ex02 ex03
+ALL = ex00 ex01 ex02 ex03 ex04
 
 all: ${ALL}
 
@@ -33,6 +33,13 @@ ex03: 03-collectiveFun.o
 
 runex03:
 	${EXEC} -n 4 ./ex03
+
+ex04: 04-reduce.o
+	${CC} ${CFLAGS} -o ex04 $^
+	${RM} $^
+
+runex04:
+	${EXEC} -n 4 ./ex04
 
 clean:
 	rm -rf ${ALL}
