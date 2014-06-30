@@ -14,6 +14,8 @@ protected:
 	Vector3dTest()
 	{
 		// You can do set-up work for each test here.
+		a.set(1, 1, 0);
+		b.set(1, 1, 1);
 	}
 
 	virtual ~Vector3dTest()
@@ -37,18 +39,19 @@ protected:
 	}
 
 	// Objects declared here can be used by all tests in the test case for Foo.
+	Vector3d a, b;
 };
 
 // Tests that a method does what it's supposed to.
 TEST_F(Vector3dTest, Magnitude)
 {
-	EXPECT_EQ(Vector3d(0,1,1).magnitude(), sqrt(2));
-	EXPECT_EQ(Vector3d(1,1,1).magnitude(), sqrt(3));
+	EXPECT_EQ(a.magnitude(), sqrt(2));
+	EXPECT_EQ(b.magnitude(), sqrt(3));
 }
 
 TEST_F(Vector3dTest, DotProduct)
 {
-	EXPECT_EQ(Vector3d(1,2,3)*Vector3d(4,5,6), 32);
+	EXPECT_EQ(a*b, 2);
 }
 
 } // namespace

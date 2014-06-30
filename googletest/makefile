@@ -1,4 +1,4 @@
-ALL: bin/main bin/tests
+ALL: bin/main bin/test1 bin/test2
 
 SRC = ${wildcard src/*.cpp}
 OBJ = ${SRC:.cpp=.o}
@@ -10,7 +10,7 @@ bin/main: ${OBJ}
 	${CXX} $^ -o $@
 
 run:
-	./bin/main
+	bin/main
 
 clean:
 	rm -rf ${OBJ}
@@ -26,8 +26,12 @@ lib/libgtest.a:
 	-c ${GTEST_DIR}/src/gtest-all.cc -o lib/gtest-all.o
 	ar -rv lib/libgtest.a lib/gtest-all.o
 
-bin/tests: tests/example.cpp lib/libgtest.a src/Vector3d.o
-	${CXX} -isystem ${GTEST_DIR}/include -I src -pthread $^ -o bin/tests
+bin/test1: tests/example.cpp lib/libgtest.a src/Vector3d.o
+	${CXX} -isystem ${GTEST_DIR}/include -I src -pthread $^ -o bin/test1
+
+bin/test2: tests/ex2.cpp lib/libgtest.a src/Vector3d.o
+	${CXX} -isystem ${GTEST_DIR}/include -I src -pthread $^ -o bin/test2
 
 runtests:
-	./bin/tests
+	bin/test1
+	bin/test2
