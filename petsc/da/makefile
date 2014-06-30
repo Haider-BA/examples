@@ -81,6 +81,10 @@ ex15: ex15.o chkopts
 	${CLINKER} -o ex15 ex15.o ${PETSC_DM_LIB}
 	${RM} -f ex15.o
 
+ex16: ex16.o chkopts
+	${CLINKER} -o ex16 ex16.o ${PETSC_DM_LIB}
+	${RM} -f ex16.o
+
 runex1:
 	${MPIEXEC} -n 4 ./ex1
 
@@ -134,3 +138,6 @@ runex14:
 
 runex15:
 	${MPIEXEC} -n 4 ./ex15
+
+runex16:
+	${MPIEXEC} -n 4 ./ex16

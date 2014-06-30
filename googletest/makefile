@@ -7,7 +7,7 @@ CPPFLAGS += -I src
 GTEST_DIR = external/gtest-1.7.0
 
 bin/main: ${OBJ}
-	g++ $^ -o $@
+	${CXX} $^ -o $@
 
 run:
 	./bin/main
@@ -22,12 +22,12 @@ vars:
 	@echo OBJ: ${OBJ}
 
 lib/libgtest.a:
-	g++ -isystem ${GTEST_DIR}/include -I${GTEST_DIR} -pthread \
+	${CXX} -isystem ${GTEST_DIR}/include -I${GTEST_DIR} -pthread \
 	-c ${GTEST_DIR}/src/gtest-all.cc -o lib/gtest-all.o
 	ar -rv lib/libgtest.a lib/gtest-all.o
 
 bin/tests: tests/example.cpp lib/libgtest.a src/Vector3d.o
-	g++ -isystem ${GTEST_DIR}/include -I src -pthread $^ -o bin/tests
+	${CXX} -isystem ${GTEST_DIR}/include -I src -pthread $^ -o bin/tests
 
 runtests:
 	./bin/tests
