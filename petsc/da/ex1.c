@@ -1,9 +1,10 @@
 #include <petscdmda.h>
 
-void hline()
+PetscErrorCode hline()
 {
 	PetscErrorCode ierr;
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRQ(ierr);
+	return 0;
 }
 
 int main(int argc,char **argv)

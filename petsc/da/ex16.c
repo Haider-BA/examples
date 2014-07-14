@@ -1,10 +1,11 @@
 #include <petscdmda.h>
 #include <petscdmcomposite.h>
 
-void hline()
+PetscErrorCode hline()
 {
 	PetscErrorCode ierr;
-	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRV(ierr);
+	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRQ(ierr);
+	return 0;
 }
 
 int main(int argc,char **argv)
@@ -28,8 +29,7 @@ int main(int argc,char **argv)
 		if(i%2==0)
 			lx[i] = 0;
 		else
-			lx[i] = 2
-			*i;
+			lx[i] = 2*i;
 		N += lx[i];
 	}
 	
@@ -42,6 +42,6 @@ int main(int argc,char **argv)
 	// Destroy structures
 	ierr = DMDestroy(&da); CHKERRQ(ierr);
 	ierr = VecDestroy(&vec); CHKERRQ(ierr);
-	ierr = PetscFinalize();
+	ierr = PetscFinalize(); CHKERRQ(ierr);
 	return 0;
 }

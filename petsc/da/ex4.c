@@ -1,9 +1,10 @@
 #include <petscdmda.h>
 
-void hline()
+PetscErrorCode hline()
 {
 	PetscErrorCode ierr;
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRQ(ierr);
+	return 0;
 }
 
 int main(int argc,char **argv)
@@ -13,7 +14,6 @@ int main(int argc,char **argv)
 	PetscErrorCode   ierr;
 	DM               uda;
 	Vec              rx, uGlobal, uLocal, ul;
-	PetscScalar      value;
 
 	ierr = PetscInitialize(&argc, &argv, NULL, NULL); CHKERRQ(ierr);
 	

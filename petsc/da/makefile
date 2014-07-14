@@ -1,13 +1,17 @@
-ALL: main
 CFLAGS	=
 FFLAGS	=
 CPPFLAGS=
 FPPFLAGS=
-CLEANFILES = ex1 ex2 ex3 ex4 ex5 ex6a ex6b ex7 ex8 ex9 ex10 ex11a ex11b ex12 ex13 ex13a ex14
+SRC=${wildcard *.c}
+BIN=${SRC:.c=}
+ALL: ${BIN}
+CLEANFILES = ${BIN}
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 
-all: ex1 ex2 ex3 ex4 ex5
+vars:
+	@echo SRC: ${SRC}
+	@echo BIN: ${BIN}
 
 ex1: ex1.o chkopts
 	${CLINKER} -o ex1 ex1.o ${PETSC_DM_LIB}

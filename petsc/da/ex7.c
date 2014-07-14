@@ -1,16 +1,19 @@
 #include <petscdmda.h>
 
-void hline()
+PetscErrorCode hline()
 {
 	PetscErrorCode ierr;
-	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRV(ierr);
+	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n------------------------------------------------------------------------------------------------------------------------\n"); CHKERRQ(ierr);
+	return 0;
 }
 
 int main(int argc,char **argv)
 {
 	PetscInt         M, N, i, j, I;
-	PetscInt         rank, m, n, mstart, nstart, *lx, *ly;
+	PetscInt         rank, m, n, mstart, nstart;
 	PetscInt         nx = 5, ny = 5;
+	const PetscInt   *lxu, *lyu;
+	PetscInt         *lxp, *lyp;
 	PetscErrorCode   ierr;
 	DM               uda, pda;
 	Vec              pGlobal, pLocal, uLocal;
@@ -28,22 +31,27 @@ int main(int argc,char **argv)
 	ierr = DMDACreate2d(PETSC_COMM_WORLD, DMDA_BOUNDARY_GHOSTED, DMDA_BOUNDARY_GHOSTED, DMDA_STENCIL_BOX, nx-1, ny, PETSC_DECIDE, PETSC_DECIDE, 1, 1, NULL, NULL, &uda); CHKERRQ(ierr);
 	ierr = DMCreateLocalVector(uda, &uLocal); CHKERRQ(ierr);
 	ierr = DMDAGetInfo(uda, NULL, NULL, NULL, NULL, &m, &n, NULL, NULL, NULL, NULL, NULL, NULL, NULL); CHKERRQ(ierr);
-	ierr = DMDAGetOwnershipRanges(uda, &lx, &ly, NULL); CHKERRQ(ierr);
+	ierr = DMDAGetOwnershipRanges(uda, &lxu, &lyu, NULL); CHKERRQ(ierr);
 	
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\nU-Node distribution along each direction [DMDAGetOwnershipRanges]"); CHKERRQ(ierr); hline();
 	for(i=0; i<m; i++)
 	{
-		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lx[i]); CHKERRQ(ierr);
+		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lxu[i]); CHKERRQ(ierr);
 	}
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n"); CHKERRQ(ierr);
 	for(i=0; i<n; i++)
 	{
-		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", ly[i]); CHKERRQ(ierr);
+		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lyu[i]); CHKERRQ(ierr);
 	}
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n"); CHKERRQ(ierr);
+
+	ierr = PetscMalloc(m*sizeof(*lxp), &lxp); CHKERRQ(ierr);
+	ierr = PetscMalloc(n*sizeof(*lyp), &lyp); CHKERRQ(ierr);
+	ierr = PetscMemcpy(lxp, lxu, m*sizeof(*lxp)); CHKERRQ(ierr);
+	ierr = PetscMemcpy(lyp, lyu, n*sizeof(*lyp)); CHKERRQ(ierr);
+	lxp[m-1]++;
 	
-	lx[m-1]++;
-	ierr = DMDACreate2d(PETSC_COMM_WORLD, DMDA_BOUNDARY_GHOSTED, DMDA_BOUNDARY_GHOSTED, DMDA_STENCIL_STAR, nx, ny, m, n, 1, 1, lx, ly, &pda); CHKERRQ(ierr);
+	ierr = DMDACreate2d(PETSC_COMM_WORLD, DMDA_BOUNDARY_GHOSTED, DMDA_BOUNDARY_GHOSTED, DMDA_STENCIL_STAR, nx, ny, m, n, 1, 1, lxp, lyp, &pda); CHKERRQ(ierr);
 	ierr = DMCreateLocalVector(pda, &pLocal); CHKERRQ(ierr);
 	ierr = DMCreateGlobalVector(pda, &pGlobal); CHKERRQ(ierr);
 	
@@ -53,15 +61,14 @@ int main(int argc,char **argv)
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "Number of processors: m, n: %d, %d\n", m, n); CHKERRQ(ierr);
 
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\nP-Node distribution along each direction [DMDAGetOwnershipRanges]"); CHKERRQ(ierr); hline();
-	ierr = DMDAGetOwnershipRanges(pda, &lx, &ly, NULL); CHKERRQ(ierr);
 	for(i=0; i<m; i++)
 	{
-		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lx[i]); CHKERRQ(ierr);
+		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lxp[i]); CHKERRQ(ierr);
 	}
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n"); CHKERRQ(ierr);
 	for(i=0; i<n; i++)
 	{
-		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", ly[i]); CHKERRQ(ierr);
+		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d\t", lyp[i]); CHKERRQ(ierr);
 	}
 	ierr = PetscPrintf(PETSC_COMM_WORLD, "\n"); CHKERRQ(ierr);
 	
@@ -96,6 +103,9 @@ int main(int argc,char **argv)
 	{
 		ierr = PetscPrintf(PETSC_COMM_WORLD, "%d %d\n", i, indices[i]); CHKERRQ(ierr);
 	}
+
+	ierr = PetscFree(lxp); CHKERRQ(ierr);
+	ierr = PetscFree(lyp); CHKERRQ(ierr);
 
 	ierr = VecDestroy(&uLocal); CHKERRQ(ierr);
 	ierr = VecDestroy(&pLocal); CHKERRQ(ierr);
