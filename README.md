@@ -1,2 +1,1 @@
-Example codes
-=============
+# Example codes
